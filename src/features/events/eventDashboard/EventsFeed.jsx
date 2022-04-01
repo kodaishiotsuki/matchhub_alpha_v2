@@ -8,12 +8,13 @@ import {
 } from "../../../app/firestore/firebaseService";
 import { listenToFeed } from "../../profiles/profileActions";
 import EventFeedItem from "./EventFeedItem";
-import { onValue } from "firebase/database";
+import { off, onValue } from "firebase/database";
 
 export default function EventsFeed() {
   const dispatch = useDispatch();
   const { feed } = useSelector((state) => state.profile);
 
+  //
   useEffect(() => {
     onValue(getUserFeedRef(), (snapshot) => {
       if (!snapshot.exists()) {

@@ -22,7 +22,8 @@ export default function EventListItem({ event }) {
             <Image
               size='tiny'
               rounded
-              src={event.hostPhotoURL}
+              // src={event.hostPhotoURL}
+              src={`/assets/categoryImages/${event.category}.jpg`}
               style={{ maxHeight: 130, width: 300 }}
             />
             <Item.Content>

@@ -1,8 +1,9 @@
 import React from "react";
-import { Header, Menu } from "semantic-ui-react";
+import { Button, Header, Menu } from "semantic-ui-react";
 // import Calender from "react-calendar"
 import { useDispatch, useSelector } from "react-redux";
 import { setFilter } from "../eventActions";
+import { Link } from "react-router-dom";
 
 export default function EventFilter({ loading }) {
   const dispatch = useDispatch();
@@ -44,13 +45,16 @@ export default function EventFilter({ loading }) {
           />
         </Menu>
       )}
-      {/* <Button content='エンジニア' /> */}
-      {/* <Header icon='calendar' attached color='teal' content='Select date' />
-      <Calender
-        onChange={(createdAt) => setPredicate("startDate", createdAt)}
-        value={predicate.get("startDate") || new Date()}
-        tileDisabled={() => loading}
-      /> */}
+
+      {/* <Button
+        style={{ width: "100%", minHeight: "100px" }}
+        color='orange'
+        content='トライアル申請する'
+        as={Link}
+        to={"/events/trial"}
+      >
+        <h1 style={{ margin: 0 }}>トライアル申請する</h1>
+      </Button> */}
     </>
   );
 }

@@ -12,6 +12,7 @@ import MyTextInput from "../../../app/common/form/MyTextInput";
 import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryData } from "../../../app/api/categoryOptions";
+import {trialMonth} from "../../../app/api/trialMonth"
 import MyDateInput from "../../../app/common/form/MyDateInput";
 import MyPlaceInput from "../../../app/common/form/MyPlaceInput";
 import {
@@ -51,6 +52,7 @@ export default function EventForm({ match, history, location }) {
     title: "",
     career: [],
     category: "",
+    trialMonth:"",
     description: "",
     pitchId: "",
     city: {
@@ -64,31 +66,6 @@ export default function EventForm({ match, history, location }) {
     date: "",
     companyPhotoURL: "",
   };
-
-  // const [image, setImage] = useState(null);
-  // const [errorMsg, setErrorMsg] = useState(false);
-
-  // const handleChange = (e) => {
-  //   if (e.target.files !== null) {
-  //     setImage(e.target.files[0]);
-  //   }
-  // };
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     // const user = firebase.auth().currentUser;
-  //     // const storageRef = firebase.storage().ref();
-  //     // return storageRef.child(`${user.uid}/company_images`).put(image);
-  //     const storageRef = firebase.storage().ref();
-  //     return storageRef
-  //       .child(`company_images/${image.name}`)
-  //       .put(image);
-  //   } catch (err) {
-  //     console.log(err);
-  //     setErrorMsg(true);
-  //   }
-  // };
 
   //入力画面バリデーション
   // const validationSchema = Yup.object({
@@ -162,6 +139,11 @@ export default function EventForm({ match, history, location }) {
               placeholder='category'
               options={categoryData}
             />
+            <MySelectInput
+              name='trialMonth'
+              placeholder='trialMonth'
+              options={trialMonth}
+            />
             <MyTextInput name='pitchId' placeholder="Push the pitch's URL" />
             <MySelectInput
               name='career[0]'
@@ -175,10 +157,6 @@ export default function EventForm({ match, history, location }) {
             />
             <MyTextArea name='description' placeholder='Description' rows={5} />
 
-            {/* <input type='file' className='input' onChange={handleChange} /> */}
-
-            {/* <MyFileInput name='companyPhotoURL' placeholder='companyPhotoURL' /> */}
-            {/* <Image /> */}
             <Header sub color='teal' content='Company Location Details' />
             <MyPlaceInput name='city' placeholder='City' />
             <MyPlaceInput

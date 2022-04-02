@@ -78,6 +78,29 @@ export function listenToEventFromFirestore(eventId) {
   return doc(db, "events", eventId);
 }
 
+//トライアルを取得
+export function listenToTrialFromFirestore(trialId) {
+  return doc(db, "trials", trialId);
+}
+
+//トライアルコレクションにドキュメント追加
+export function addTrialToFirestore(trial) {
+  const user = auth.currentUser;
+  return addDoc(collection(db, "trials"), {
+    ...trial,
+    requestUid: user.uid,
+    requestedBy: user.displayName,
+    requestUserPhotoURL: user.photoURL || null,
+    // attendees: arrayUnion({
+    //   id: user.uid,
+    //   displayName: user.displayName,
+    //   photoURL: user.photoURL || null,
+    // }),
+    // attendeeIds: arrayUnion(user.uid),
+    createdAt: serverTimestamp(),
+  });
+}
+
 //イベントコレクションにドキュメント追加
 export function addEventToFirestore(event) {
   const user = auth.currentUser;
@@ -93,7 +116,16 @@ export function addEventToFirestore(event) {
     }),
     attendeeIds: arrayUnion(user.uid),
     createdAt: serverTimestamp(),
-  });
+  }).then(
+    addDoc(collection(db, "companies"), {
+      companyName: event.title,
+      hostUid: user.uid,
+      hostedBy: user.displayName,
+      hostPhotoURL: user.photoURL || null,
+      trialMonth: event.trialMonth,
+      createdAt: serverTimestamp(),
+    })
+  );
 }
 
 //イベントコレクション更新
@@ -123,6 +155,12 @@ export function setUserProfileData(user) {
     photoURL: user.photoURL || null,
     createdAt: serverTimestamp(),
   });
+}
+
+//usersコレクションにhostUidを追加
+export function addUserProfileData(user, eventId) {
+  const event = doc(db, "events", eventId);
+  const hostId = event.hostUid;
 }
 
 //ユーザー情報取得
@@ -180,7 +218,7 @@ export async function setMainPhoto(photo) {
   // const today = new Date();
   const eventDocQuery = query(
     collection(db, "events"),
-    where("attendeeIds", "array-contains", user.uid),
+    where("attendeeIds", "array-contains", user.uid)
     // where("date", "<=", today)
   );
   const userFollowingRef = collection(
@@ -312,9 +350,18 @@ export async function followUser(profile) {
       photoURL: profile.photoURL || "/assets/user.png",
       uid: profile.id,
     });
+    //firestoreのアクション
+    batch.set(doc(db, "following", profile.id, "userFollowers", user.uid), {
+      displayName: user.displayName,
+      photoURL: user.photoURL || "/assets/user.png",
+      uid: user.id,
+    });
 
     batch.update(doc(db, "users", user.uid), {
       followingCount: increment(1),
+    });
+    batch.update(doc(db, "users", profile.id), {
+      followerCount: increment(1),
     });
     return await batch.commit();
   } catch (e) {

@@ -6,15 +6,18 @@ import testReducer from "../../features/sandbox/testReducer";
 import asyncReducer from "../async/asyncReducer";
 import modalReducer from "../common/modals/modalReducer";
 import { connectRouter } from "connected-react-router";
+import trialReducer from "../../features/trial/trialReducer";
 
-const rootReducer = (history) => combineReducers({
-  router:connectRouter(history),
-  test: testReducer,
-  event: eventReducer,
-  modals: modalReducer,
-  auth: authReducer,
-  async: asyncReducer,
-  profile: profileReducer,
-});
+const rootReducer = (history) =>
+  combineReducers({
+    router: connectRouter(history),
+    test: testReducer,
+    event: eventReducer,
+    modals: modalReducer,
+    auth: authReducer,
+    async: asyncReducer,
+    profile: profileReducer,
+    trial: trialReducer,
+  });
 
 export default rootReducer;

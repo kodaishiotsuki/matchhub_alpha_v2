@@ -29,7 +29,12 @@ export default function EventListItem({ event }) {
             <Item.Content>
               <Item.Header content={event.title} size='large' />
               <br />
-              <br />
+              <Label
+                style={{ top: "-40px" }}
+                ribbon='right'
+                color='orange'
+                content={`トライアル期間：${event.trialMonth}ヶ月`}
+              />
               <Item.Header
                 content='The people we seek RECRUIT'
                 style={{ fontSize: 15 }}
@@ -47,14 +52,15 @@ export default function EventListItem({ event }) {
                 Foundered by
                 <Link to={`/profile/${event.hostUid}`}> {event.hostedBy}</Link>
               </Item.Description>
-              {event.isCancelled && (
+
+              {/* {event.isCancelled && (
                 <Label
                   style={{ top: "-40px" }}
                   ribbon='right'
                   color='red'
                   content='This event has been cancelled'
                 />
-              )}
+              )} */}
             </Item.Content>
           </Item>
         </Item.Group>

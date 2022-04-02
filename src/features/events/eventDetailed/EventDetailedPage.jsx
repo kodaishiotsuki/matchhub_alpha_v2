@@ -50,6 +50,9 @@ export default function EventDetailedPage({ match }) {
         <EventDetailedSidebar
           attendees={event?.attendees}
           hostUid={event.hostUid}
+          event={event}
+          isGoing={isGoing}
+          isHost={isHost}
         />
       </Grid.Column>
     </Grid>

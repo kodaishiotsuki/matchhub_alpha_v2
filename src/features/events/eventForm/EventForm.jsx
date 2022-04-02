@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { clearSelectedEvents, listenToSelectedEvents } from "../eventActions";
 
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import MyTextInput from "../../../app/common/form/MyTextInput";
 import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
@@ -91,19 +91,19 @@ export default function EventForm({ match, history, location }) {
   // };
 
   //入力画面バリデーション
-  const validationSchema = Yup.object({
-    title: Yup.string().required("You must provide title"),
-    career: Yup.string().required("You must provide career"),
-    category: Yup.string().required("You must provide category"),
-    description: Yup.string().required("You must provide description"),
-    city: Yup.object().shape({
-      address: Yup.string().required("City is required"),
-    }),
-    venue: Yup.object().shape({
-      address: Yup.string().required("Venue is required"),
-    }),
-    date: Yup.string().required("You must provide date"),
-  });
+  // const validationSchema = Yup.object({
+  //   title: Yup.string().required("You must provide title"),
+  //   career: Yup.string().required("You must provide career"),
+  //   category: Yup.string().required("You must provide category"),
+  //   description: Yup.string().required("You must provide description"),
+  //   city: Yup.object().shape({
+  //     address: Yup.string().required("City is required"),
+  //   }),
+  //   venue: Yup.object().shape({
+  //     address: Yup.string().required("Venue is required"),
+  //   }),
+  //   date: Yup.string().required("You must provide date"),
+  // });
 
   //キャンセルボタンクリック時のアクション
   async function handleCancelToggle(event) {

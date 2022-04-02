@@ -8,7 +8,7 @@ import {
 } from "../../../app/firestore/firebaseService";
 import { listenToFeed } from "../../profiles/profileActions";
 import EventFeedItem from "./EventFeedItem";
-import { off, onValue } from "firebase/database";
+import {  onValue } from "firebase/database";
 
 export default function EventsFeed() {
   const dispatch = useDispatch();

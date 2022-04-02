@@ -1,9 +1,9 @@
 import React from "react";
-import { Button, Header, Menu } from "semantic-ui-react";
+import { Header, Menu } from "semantic-ui-react";
 // import Calender from "react-calendar"
 import { useDispatch, useSelector } from "react-redux";
 import { setFilter } from "../eventActions";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 export default function EventFilter({ loading }) {
   const dispatch = useDispatch();

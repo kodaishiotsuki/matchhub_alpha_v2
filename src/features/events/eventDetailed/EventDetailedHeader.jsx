@@ -1,68 +1,87 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button, Header, Image, Item, Segment } from "semantic-ui-react";
-import { toast } from "react-toastify";
-import {
-  addUserAttendance,
-  cancelUserAttendance,
-} from "../../../app/firestore/firestoreService";
-import { useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
+import { Segment } from "semantic-ui-react";
+// import { toast } from "react-toastify";
+// import {
+//   addUserAttendance,
+//   cancelUserAttendance,
+// } from "../../../app/firestore/firestoreService";
+// import { useSelector } from "react-redux";
 import UnauthModal from "../../auth/UnauthModal";
+import YouTube from "react-youtube";
+import style from "./Youtube.module.css";
 
-const eventImageStyle = {
-  filter: "brightness(30%)",
-};
+// const eventImageStyle = {
+//   filter: "brightness(30%)",
+// };
 
-const eventImageTextStyle = {
-  position: "absolute",
-  bottom: "5%",
-  left: "5%",
-  width: "100%",
-  height: "auto",
-  color: "white",
-};
-
-export default function EventDetailedHeader({ event, isGoing, isHost }) {
-  const [loading, setLoading] = useState(false);
-  const { authenticated } = useSelector((state) => state.auth);
+export default function EventDetailedHeader({ event }) {
+  // const [ loading,setLoading] = useState(false);
+  // const { authenticated } = useSelector((state) => state.auth);
   const [modalOpen, setModalOpen] = useState(false);
 
   //イベントに参加（会社のメンバー）
-  async function handleUserJoinEvent() {
-    setLoading(true);
-    try {
-      await addUserAttendance(event);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // async function handleUserJoinEvent() {
+  //   setLoading(true);
+  //   try {
+  //     await addUserAttendance(event);
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   //イベントキャンセル（会社のメンバー脱退）
-  async function handleUserLeaveEvent() {
-    setLoading(true);
-    try {
-      await cancelUserAttendance(event);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // async function handleUserLeaveEvent() {
+  //   setLoading(true);
+  //   try {
+  //     await cancelUserAttendance(event);
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
+  const opts = {
+    playerVars: {
+      autoplay: 0,
+      mute: 1,
+      playsinline: 1,
+      loop: 1,
+      playlist: event.pitchId,
+    },
+  };
   return (
     <>
       {modalOpen && <UnauthModal setModalOpen={setModalOpen} />}
       <Segment.Group>
-        <Segment basic attached='top' style={{ padding: "0" }}>
-          <Image
+        <Segment
+          textAlign='center'
+          style={{ border: "none" }}
+          attached='top'
+          secondary
+          inverted
+          color='teal'
+        >
+          <h2>{event.title}の紹介動画</h2>
+        </Segment>
+        {/* <Segment basic attached='top' style={{ padding: "0" }}> */}
+        <YouTube
+          videoId={event.pitchId}
+          className={style.iframe}
+          containerClassName={style.youtube}
+          opts={opts}
+          width='5000px'
+        />
+        {/* <Image
             src={`/assets/categoryImages/${event.category}.jpg`}
             fluid
             style={eventImageStyle}
-          />
+          /> */}
 
-          <Segment basic style={eventImageTextStyle}>
+        {/* <Segment basic style={eventImageTextStyle}>
             <Item.Group>
               <Item>
                 <Item.Content>
@@ -71,7 +90,6 @@ export default function EventDetailedHeader({ event, isGoing, isHost }) {
                     content={event.title}
                     style={{ color: "white" }}
                   />
-                  {/* <p>{format(event.date, "MMMM d, yyyy h:mm a")}</p> */}
                   <br />
                   <br />
                   <p>
@@ -85,10 +103,10 @@ export default function EventDetailedHeader({ event, isGoing, isHost }) {
                 </Item.Content>
               </Item>
             </Item.Group>
-          </Segment>
-        </Segment>
+          </Segment> */}
+        {/* </Segment> */}
 
-        <Segment attached='bottom' clearing>
+        {/* <Segment attached='bottom' clearing>
           {!isHost && (
             <>
               {isGoing ? (
@@ -111,7 +129,7 @@ export default function EventDetailedHeader({ event, isGoing, isHost }) {
             </>
           )}
 
-          {/* イベントホストのみ編集可能 */}
+          イベントホストのみ編集可能
           {isHost && (
             <Button
               as={Link}
@@ -122,7 +140,7 @@ export default function EventDetailedHeader({ event, isGoing, isHost }) {
               Manage Event
             </Button>
           )}
-        </Segment>
+        </Segment> */}
       </Segment.Group>
     </>
   );

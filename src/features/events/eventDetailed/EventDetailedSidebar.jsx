@@ -1,10 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Item, Label, Segment } from "semantic-ui-react";
+import { toast } from "react-toastify";
+import { Button, Item, Label, Segment } from "semantic-ui-react";
+import {
+  addUserAttendance,
+  cancelUserAttendance,
+} from "../../../app/firestore/firestoreService";
+import UnauthModal from "../../auth/UnauthModal";
 
-export default function EventDetailedSidebar({ attendees, hostUid }) {
+export default function EventDetailedSidebar({ attendees, hostUid, event, isGoing, isHost }) {
+  const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const { authenticated } = useSelector((state) => state.auth);
+  //イベントに参加（会社のメンバー）
+  async function handleUserJoinEvent() {
+    setLoading(true);
+    try {
+      await addUserAttendance(event);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  //イベントキャンセル（会社のメンバー脱退）
+  async function handleUserLeaveEvent() {
+    setLoading(true);
+    try {
+      await cancelUserAttendance(event);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <>
+      {modalOpen && <UnauthModal setModalOpen={setModalOpen} />}
       <Segment
         textAlign='center'
         style={{ border: "none" }}
@@ -13,7 +47,7 @@ export default function EventDetailedSidebar({ attendees, hostUid }) {
         inverted
         color='teal'
       >
-        {attendees.length} Member
+        <h2>{attendees.length}人のメンバー</h2>
       </Segment>
       <Segment attached>
         <Item.Group relaxed divided>
@@ -29,7 +63,7 @@ export default function EventDetailedSidebar({ attendees, hostUid }) {
                   style={{ position: "absolute" }}
                   color='orange'
                   ribbon='right'
-                  content='Foundered'
+                  content='代表者'
                 />
               )}
               <Item.Image
@@ -45,6 +79,39 @@ export default function EventDetailedSidebar({ attendees, hostUid }) {
             </Item>
           ))}
         </Item.Group>
+      </Segment>
+
+      <Segment attached='bottom' clearing>
+        {!isHost && (
+          <>
+            {isGoing ? (
+              <Button onClick={handleUserLeaveEvent} loading={loading}>
+                企業から脱退
+              </Button>
+            ) : (
+              <Button
+                color='teal'
+                onClick={
+                  authenticated ? handleUserJoinEvent : () => setModalOpen(true) //ログイン促す
+                }
+                loading={loading}
+              >
+                企業に参加
+              </Button>
+            )}
+          </>
+        )}
+        {/* イベントホストのみ編集可能 */}
+        {isHost && (
+          <Button
+            as={Link}
+            to={`/manage/${event.id}`}
+            color='orange'
+            floated='right'
+          >
+            会社情報編集
+          </Button>
+        )}
       </Segment>
     </>
   );

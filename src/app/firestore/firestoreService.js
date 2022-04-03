@@ -78,28 +78,6 @@ export function listenToEventFromFirestore(eventId) {
   return doc(db, "events", eventId);
 }
 
-//トライアルを取得
-export function listenToTrialFromFirestore(trialId) {
-  return doc(db, "trials", trialId);
-}
-
-//トライアルコレクションにドキュメント追加
-export function addTrialToFirestore(trial) {
-  const user = auth.currentUser;
-  return addDoc(collection(db, "trials"), {
-    ...trial,
-    requestUid: user.uid,
-    requestedBy: user.displayName,
-    requestUserPhotoURL: user.photoURL || null,
-    // attendees: arrayUnion({
-    //   id: user.uid,
-    //   displayName: user.displayName,
-    //   photoURL: user.photoURL || null,
-    // }),
-    // attendeeIds: arrayUnion(user.uid),
-    createdAt: serverTimestamp(),
-  });
-}
 
 //イベントコレクションとカンパニーコレクションにドキュメント追加
 export function addEventToFirestore(event) {
@@ -394,4 +372,19 @@ export function getFollowingCollection(profileId) {
 export function getFollowingDoc(profileId) {
   const userUid = auth.currentUser.uid;
   return getDoc(doc(db, "following", userUid, "userFollowing", profileId));
+}
+
+
+//お気に入り会社追加
+export function addUserFavoriteCompany(company) {
+  const user = auth.currentUser;
+  return addDoc(collection(db, "users", user.uid, "companies"), {
+    companyName: company.title,
+  });
+}
+
+//お気に入り会社削除
+export function deleteUserFavoriteCompany(companyId) {
+  const user = auth.currentUser;
+  return deleteDoc(doc(db, "users", user.uid, "companies", companyId));
 }

@@ -8,7 +8,7 @@ const initialState = {
   currentLocation: null,
 };
 
-export default function authReducer(state = initialState, { type, payload }) {
+export default function authReducer(state = initialState, { type, payload }) { //action
   switch (type) {
     case SIGN_IN_USER:
       return {

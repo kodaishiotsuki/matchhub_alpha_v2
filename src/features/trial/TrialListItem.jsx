@@ -1,15 +1,24 @@
+import { getAuth } from "firebase/auth";
+import {
+  doc,
+  getFirestore,
+} from "firebase/firestore";
 import React from "react";
 // import { Link } from "react-router-dom";
-import {
-  Button,
-  Icon,
-  Image,
-  Item,
-  Label,
-  Segment,
-} from "semantic-ui-react";
+import { Button, Icon, Image, Item, Label, Segment } from "semantic-ui-react";
+import { app } from "../../app/config/firebase";
 
 export default function TrialListItem({ company }) {
+  //fireStore,firebase
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+  const userDocRef = doc(db, "users", user.uid);
+  console.log(userDocRef);
+
+
+
+  
   return (
     <Segment.Group>
       <Segment>
@@ -65,7 +74,6 @@ export default function TrialListItem({ company }) {
       </Segment>
       <Segment clearing>
         <Button
-          // onClick={() => deleteEventInFirestore(event.id)}
           color='red'
           floated='right'
           content='Delete'

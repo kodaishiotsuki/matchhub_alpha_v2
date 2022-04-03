@@ -2,26 +2,24 @@ import React, { useState } from "react";
 import { Button, Grid, Icon, Label, Segment } from "semantic-ui-react";
 import { format } from "date-fns";
 import EventDetailedMap from "./EventDetailedMap";
-import YouTube from "react-youtube";
-import style from "./Youtube.module.css";
 import { useSelector } from "react-redux";
 
-export default function EventDetailedInfo({ event }) {
+export default function EventDetailedInfo({ event, isHost }) {
   const { authenticated } = useSelector((state) => state.auth);
   const [mapOpen, setMapOpen] = useState(false);
-  const [videoOpen, setVideoOpen] = useState(false);
-  const opts = {
-    playerVars: {
-      autoplay: 0,
-      mute: 1,
-      playsinline: 1,
-      loop: 1,
-      playlist: event.pitchId,
-    },
-  };
   return (
     <Segment.Group>
-      <Segment attached='top'>
+      <Segment
+        textAlign='center'
+        style={{ border: "none" }}
+        attached='top'
+        secondary
+        inverted
+        color='teal'
+      >
+        <h2>{event.title}とは</h2>
+      </Segment>
+      <Segment>
         <Grid>
           <Grid.Column width={1}>
             <Icon size='large' color='teal' name='info' />
@@ -66,35 +64,6 @@ export default function EventDetailedInfo({ event }) {
       <Segment attached>
         <Grid verticalAlign='middle'>
           <Grid.Column width={1}>
-            <Icon name='video' size='large' color='teal' />
-          </Grid.Column>
-          <Grid.Column width={11}>
-            <span>{`${event.title}の紹介PITCH`}</span>
-          </Grid.Column>
-          <Grid.Column width={4}>
-            <Button
-              onClick={() => setVideoOpen(!videoOpen)}
-              color='teal'
-              size='tiny'
-              content={videoOpen ? "Hide Video" : "Show Video"}
-              disabled={!authenticated}
-            />
-          </Grid.Column>
-        </Grid>
-      </Segment>
-      {videoOpen && (
-        <YouTube
-          videoId={event.pitchId}
-          className={style.iframe}
-          containerClassName={style.youtube}
-          opts={opts}
-          width='1600px'
-        />
-      )}
-
-      <Segment attached>
-        <Grid verticalAlign='middle'>
-          <Grid.Column width={1}>
             <Icon name='marker' size='large' color='teal' />
           </Grid.Column>
           <Grid.Column width={11}>
@@ -104,14 +73,26 @@ export default function EventDetailedInfo({ event }) {
             <Button
               onClick={() => setMapOpen(!mapOpen)}
               color='teal'
-              size='tiny'
-              content={mapOpen ? "Hide map" : "Show Map"}
+              content={mapOpen ? "地図を開く" : "地図を隠す"}
               disabled={!authenticated}
             />
           </Grid.Column>
         </Grid>
       </Segment>
       {mapOpen && <EventDetailedMap latLng={event.venue.latLng} />}
+
+      <Segment attached='bottom' clearing>
+        {/* イベントホストのみ編集可能 */}
+        {!isHost && (
+          <Button
+            color='orange'
+            floated='right'
+            style={{ marginRight: 200, paddingRight: 50, paddingLeft: 50,fontSize:20 }}
+          >
+            お気に入り登録
+          </Button>
+        )}
+      </Segment>
     </Segment.Group>
   );
 }

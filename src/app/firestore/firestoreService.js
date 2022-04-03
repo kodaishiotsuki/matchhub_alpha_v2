@@ -101,7 +101,7 @@ export function addTrialToFirestore(trial) {
   });
 }
 
-//イベントコレクションにドキュメント追加
+//イベントコレクションとカンパニーコレクションにドキュメント追加
 export function addEventToFirestore(event) {
   const user = auth.currentUser;
   return addDoc(collection(db, "events"), {
@@ -120,9 +120,11 @@ export function addEventToFirestore(event) {
     addDoc(collection(db, "companies"), {
       companyName: event.title,
       hostUid: user.uid,
-      hostedBy: user.displayName,
-      hostPhotoURL: user.photoURL || null,
+      companyHost: user.displayName,
+      companyPhotoURL: event.category,
       trialMonth: event.trialMonth,
+      companyCareer: event.career,
+      companyAddress:event.venue.address,
       createdAt: serverTimestamp(),
     })
   );
@@ -155,12 +157,6 @@ export function setUserProfileData(user) {
     photoURL: user.photoURL || null,
     createdAt: serverTimestamp(),
   });
-}
-
-//usersコレクションにhostUidを追加
-export function addUserProfileData(user, eventId) {
-  const event = doc(db, "events", eventId);
-  const hostId = event.hostUid;
 }
 
 //ユーザー情報取得

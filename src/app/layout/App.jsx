@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import LoadingComponent from "./LoadingComponent";
 import ProfilePage from "../../features/profiles/profilePage/ProfilePage";
 import PrivateRoute from "./PrivateRoute";
-import TrialForm from "../../features/trial/TrialForm";
+import TrialList from "../../features/trial/TrialList";
 
 function App() {
   const { key } = useLocation();
@@ -37,7 +37,7 @@ function App() {
             <Container className='main'>
               <Route exact path='/events' component={EventDashboard} />
               <Route exact path='/sandbox' component={Sandbox} />
-              <Route path='/trial' component={TrialForm} />
+              <Route path='/trial' component={TrialList} />
               <Route path='/events/:id' component={EventDetailedPage} />
 
               {/* 同じコンポーネントを開くためのroute */}

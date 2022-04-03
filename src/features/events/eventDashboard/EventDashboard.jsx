@@ -16,7 +16,6 @@ const EventDashboard = () => {
     useSelector((state) => state.event);
   const { loading } = useSelector((state) => state.async);
   const { authenticated } = useSelector((state) => state.auth);
-  // const [lastDocSnapshot, setLastDocSnapShot] = useState(null);
   const [loadingInitial, setLoadingInitial] = useState(false);
 
   //フィルター機能初期設定
@@ -27,6 +26,8 @@ const EventDashboard = () => {
   //   ])
   // );
 
+  // const { currentUser } = useSelector((state) => state.auth);
+  
   //フィルター機能イベント
   // function handleSetPredicate(key, value) {
   //   dispatch(clearEvents()); //クリーンアップ
@@ -34,11 +35,11 @@ const EventDashboard = () => {
   //   setPredicate(new Map(predicate.set(key, value)));
   // }
 
-  //DBから取得
+  // // DBから取得
   // useFirestoreCollection({
-  //   query: () => fetchEventsFromFirestore(predicate), //eventsコレクション
-  //   data: (events) => dispatch(listenToEvents(events)),
-  //   deps: [dispatch, predicate],
+  //   query: () => fetchEventsFromFirestore(), //eventsコレクション
+  //   data: (events) => dispatch(listenToEventFromFirestore(events)),
+  //   deps: [dispatch],
   // });
 
   //ページング
@@ -73,6 +74,7 @@ const EventDashboard = () => {
           getNextEvents={handleFetchNextEvents}
           loading={loading}
           moreEvents={moreEvents}
+          // isHost={isHost}
         />
         {/* <Button
           loading={loading}
@@ -85,9 +87,7 @@ const EventDashboard = () => {
       </Grid.Column>
       <Grid.Column width={6}>
         {authenticated && <EventsFeed />}
-        <EventFilter
-          loading={loading}
-        />
+        <EventFilter loading={loading} />
       </Grid.Column>
       <Grid.Column width={10}>
         <Loader active={loading} />

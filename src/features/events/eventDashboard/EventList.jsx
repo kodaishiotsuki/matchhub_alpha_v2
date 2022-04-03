@@ -7,6 +7,7 @@ export default function EventList({
   getNextEvents,
   loading,
   moreEvents,
+  isHost,
 }) {
   return (
     <>
@@ -18,7 +19,7 @@ export default function EventList({
           initialLoad={false}
         >
           {events.map((event) => (
-            <EventListItem key={event.id} event={event} />
+            <EventListItem key={event.id} event={event} isHost={isHost} />
           ))}
         </InfiniteScroll>
       )}

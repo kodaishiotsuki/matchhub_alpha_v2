@@ -155,15 +155,10 @@ export async function updateUserProfile(profile) {
     throw error;
   }
 }
-//ユーザー情報更新
+//ユーザータイプ選択
 export async function UserType(profile) {
   const user = auth.currentUser;
   try {
-    // if (user.displayName !== profile.displayName) {
-    //   updateProfile(user, {
-    //     displayName: profile.displayName,
-    //   });
-    // }
     return await updateDoc(doc(db, "users", user.uid), {
       userType: profile.userType,
     });

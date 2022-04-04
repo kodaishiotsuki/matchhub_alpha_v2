@@ -1,24 +1,24 @@
-import { getAuth } from "firebase/auth";
-import {
-  doc,
-  getFirestore,
-} from "firebase/firestore";
 import React from "react";
+import { Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
-import { Button, Icon, Image, Item, Label, Segment } from "semantic-ui-react";
-import { app } from "../../app/config/firebase";
+import {
+  Button,
+  Icon,
+  Image,
+  Item,
+  Label,
+  List,
+  Segment,
+} from "semantic-ui-react";
 
 export default function TrialListItem({ company }) {
   //fireStore,firebase
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  const user = auth.currentUser;
-  const userDocRef = doc(db, "users", user.uid);
-  console.log(userDocRef);
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
+  // const user = auth.currentUser;
+  // const userDocRef = doc(db, "users", user.uid);
+  // console.log(userDocRef);
 
-
-
-  
   return (
     <Segment.Group>
       <Segment>
@@ -27,20 +27,20 @@ export default function TrialListItem({ company }) {
             <Image
               size='tiny'
               rounded
-              src={`/assets/categoryImages/${company.companyPhotoURL}.jpg`}
-              style={{ maxHeight: 130, width: 300 }}
+              src={`/assets/categoryImages/${company.companyCategory}.jpg`}
+              style={{ maxHeight: 150, width: 300 }}
             />
             <Item.Content>
               <Item.Header
                 content={company.companyName}
-                style={{ fontSize: 50, marginTop: 10 }}
+                style={{ fontSize: 45, marginTop: 20 }}
               />
               <br />
               <Label
-                style={{ top: "-40px", fontSize: 20 }}
+                style={{ top: "-55px", fontSize: 20 }}
                 ribbon='right'
                 color='orange'
-                content={`トライアル期間：${company.trialMonth}ヶ月`}
+                content={`トライアル期間：${company.companyTrialMonth}ヶ月`}
               />
               <br />
               <Icon name='tag' />
@@ -58,10 +58,6 @@ export default function TrialListItem({ company }) {
                 className='ui teal tag label'
                 content={company.companyCareer[1]}
               ></Item.Content>
-              {/* {/* <Item.Description>
-                Foundered by
-                <Link to={`/profile/${event.hostUid}`}> {event.hostedBy}</Link>
-              </Item.Description> */}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -72,11 +68,24 @@ export default function TrialListItem({ company }) {
           {company.companyAddress}
         </span>
       </Segment>
-      <Segment clearing>
+      <Segment clearing style={{maxHeight:90} }>
+        <List floated='left'>
+          {company.companyMembers.map((member) => (
+            <List.Item
+              key={member.id}
+              as={Link}
+              to={`/profile/${member.id}`}
+              floated='left'
+            >
+              <Image circular src={member.photoURL} style={{ width: 60 }} />
+            </List.Item>
+          ))}
+        </List>
         <Button
-          color='red'
+          color='green'
           floated='right'
-          content='Delete'
+          content='トライアル申請'
+          style={{paddingTop:20,paddingBottom:20,fontSize:20,width:230}}
         />
         {/* <Button
           as={Link}

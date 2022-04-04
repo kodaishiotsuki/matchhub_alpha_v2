@@ -78,7 +78,6 @@ export function listenToEventFromFirestore(eventId) {
   return doc(db, "events", eventId);
 }
 
-
 //イベントコレクションとカンパニーコレクションにドキュメント追加
 export function addEventToFirestore(event) {
   const user = auth.currentUser;
@@ -102,7 +101,7 @@ export function addEventToFirestore(event) {
       companyPhotoURL: event.category,
       trialMonth: event.trialMonth,
       companyCareer: event.career,
-      companyAddress:event.venue.address,
+      companyAddress: event.venue.address,
       createdAt: serverTimestamp(),
     })
   );
@@ -374,17 +373,25 @@ export function getFollowingDoc(profileId) {
   return getDoc(doc(db, "following", userUid, "userFollowing", profileId));
 }
 
-
 //お気に入り会社追加
 export function addUserFavoriteCompany(company) {
   const user = auth.currentUser;
   return addDoc(collection(db, "users", user.uid, "companies"), {
     companyName: company.title,
+    companyCareer: company.career,
+    companyCategory: company.category,
+    companyHostUid: company.hostUid,
+    companyHost: company.hostedBy,
+    companyTrialMonth: company.trialMonth,
+    companyAddress: company.venue.address,
+    companyMemberIds: company.attendeeIds,
+    companyMembers: company.attendees,
+    createdAt: serverTimestamp(),
   });
 }
 
 //お気に入り会社削除
 export function deleteUserFavoriteCompany(companyId) {
   const user = auth.currentUser;
-  return deleteDoc(doc(db, "users", user.uid, "companies", companyId));
+  return deleteDoc(setDoc(db, "users", user.uid, "companies", companyId));
 }

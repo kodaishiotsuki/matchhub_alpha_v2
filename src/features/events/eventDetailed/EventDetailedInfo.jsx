@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Grid, Icon, Label, Segment } from "semantic-ui-react";
 import { format } from "date-fns";
 import EventDetailedMap from "./EventDetailedMap";
 import { useSelector } from "react-redux";
 import {
   addUserFavoriteCompany,
-  deleteUserFavoriteCompany,
+  // deleteUserFavoriteCompany,
 } from "../../../app/firestore/firestoreService";
 
 
 export default function EventDetailedInfo({ event, isHost }) {
-  //ログイン中
   const { authenticated } = useSelector((state) => state.auth);
   const [mapOpen, setMapOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [disable, setDisable] = useState(false);
+  // const [disable, setDisable] = useState(false);
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
 
+  // const user = auth.currentUser;
   //企業のお気に入り登録
   async function handleUserFavoriteCompany() {
     setLoading(true);
@@ -25,23 +27,23 @@ export default function EventDetailedInfo({ event, isHost }) {
       console.log("fserror", error);
       throw error;
     } finally {
-      setDisable(true);
+      // setDisable(true);
       setLoading(false);
     }
   }
 
-  //お気に入り解除(わからん)
-  async function handleUserUnFavoriteCompany() {
-    setLoading(true);
-    try {
-      await deleteUserFavoriteCompany();
-    } catch (error) {
-      console.log("fserror", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }
+  //この部分です！！
+  // async function handleUserUnFavoriteCompany(company) {
+  //   setLoading(true);
+  //   try {
+  //     await deleteDoc(setDoc(db, "users", user.uid, "companies", company.id));
+  //   } catch (error) {
+  //     console.log("fserror", error);
+  //     throw error;
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   return (
     <Segment.Group>
@@ -132,7 +134,7 @@ export default function EventDetailedInfo({ event, isHost }) {
             onClick={handleUserFavoriteCompany}
             loading={loading}
           >
-            お気に入り登録
+            お気に入り解除
           </Button>
         )}
       </Segment>

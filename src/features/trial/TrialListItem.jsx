@@ -69,7 +69,7 @@ export default function TrialListItem({ company }) {
         </span>
       </Segment>
       <Segment clearing style={{maxHeight:90} }>
-        <List floated='left'>
+        <List floated='left' style={{display:"flex"}}>
           {company.companyMembers.map((member) => (
             <List.Item
               key={member.id}
@@ -77,7 +77,7 @@ export default function TrialListItem({ company }) {
               to={`/profile/${member.id}`}
               floated='left'
             >
-              <Image circular src={member.photoURL} style={{ width: 60 }} />
+              <Image circular src={member.photoURL} style={{ width: 60 ,marginRight:15}} />
             </List.Item>
           ))}
         </List>

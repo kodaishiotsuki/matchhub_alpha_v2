@@ -1,66 +1,72 @@
-// import { getAuth } from "firebase/auth";
-// import {
-//   addDoc,
-//   collection,
-//   doc,
-//   getDoc,
-//   getDocs,
-//   getFirestore,
-//   onSnapshot,
-//   setDoc,
-//   updateDoc,
-// } from "firebase/firestore";
-// import { useState, useEffect, useRef } from "react";
-// import { app } from "../../app/config/firebase";
+import React from "react";
+import ModalWrapper from "../../app/common/modals/ModalWrapper";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import {
+  Button,
+} from "semantic-ui-react";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../app/common/modals/modalReducer";
+import { Link, useHistory } from "react-router-dom";
+import MySelectInput from "../../app/common/form/MySelectInput";
+import { userTypeOptions } from "../../app/api/userTypeOptions";
+import { toast } from "react-toastify";
+import { UserType } from "../../app/firestore/firestoreService";
 
-// export default function UserTypePage() {
-//   const [users, setUsers] = useState([]);
-//   const db = getFirestore(app);
-//   const auth = getAuth(app);
+export default function UserTypePage() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  return (
+    <>
+      <ModalWrapper size='mini' header='ユーザーのタイプを選択してください'>
+        <Formik
+          initialValues={{
+            userType: "",
+          }}
+          validationSchema={Yup.object({
+            userType: Yup.string().required(),
+          })}
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              await UserType(values); //firestoreに追加
+              setSubmitting(false);
+              dispatch(closeModal());
+              history.push("/events");
+            } catch (error) {
+              toast.error(error.message);
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ isSubmitting, isValid, dirty }) => (
+            <Form className='ui form'>
+              <MySelectInput
+                name='userType'
+                placeholder='ユーザーのタイプ'
+                options={userTypeOptions}
+              />
 
-//   useEffect(() => {
-//     const userId = auth.currentUser.uid;
-//     const userDocumentRef = doc(db, "users", userId);
-//     getDoc(userDocumentRef).then((documentSnapshot) => {
-//       console.log(documentSnapshot.data());
-//     });
-
-
-    
-//   }, [db, auth.currentUser.uid]);
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-//     const userType = event.target.value;
-//     const userId = auth.currentUser.uid;
-//     const userDocumentRef = doc(db, "users", userId);
-//     await addDoc(userDocumentRef, {
-//       userType: userType,
-//     });
-//     console.log(userType);
-//   };
-
-//   return (
-//     <div style={{ margin: "50px" }}>
-//       <form onSubmit={handleSubmit}>
-//         <div>
-//           <label>名前</label>
-//           <input
-//             name='userType'
-//             type='text'
-//             placeholder='名前'
-//           />
-//         </div>
-//         <div>
-//           <button>登録</button>
-//         </div>
-//       </form>
-//       <h1>ユーザ一覧</h1>
-//       <div>
-//         {users.map((user) => (
-//           <div key={user.id}>{user.userType}</div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
+              <Button
+                loading={isSubmitting}
+                disabled={!isValid || !dirty || isSubmitting}
+                type='submit'
+                fluid
+                size='large'
+                color='teal'
+                content='Register'
+              />
+              <Button
+                fluid
+                size='large'
+                content='return'
+                style={{ marginTop: 10 }}
+                as={Link}
+                to={"/events"}
+              />
+            </Form>
+          )}
+        </Formik>
+      </ModalWrapper>
+    </>
+  );
+}

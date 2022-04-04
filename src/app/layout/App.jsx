@@ -17,6 +17,7 @@ import LoadingComponent from "./LoadingComponent";
 import ProfilePage from "../../features/profiles/profilePage/ProfilePage";
 import PrivateRoute from "./PrivateRoute";
 import TrialList from "../../features/trial/TrialList";
+import UserTypePage from "../../features/auth/UserTypePage";
 
 function App() {
   const { key } = useLocation();
@@ -37,6 +38,7 @@ function App() {
             <Container className='main'>
               <Route exact path='/events' component={EventDashboard} />
               <Route exact path='/sandbox' component={Sandbox} />
+              <Route exact path='/usertype' component={UserTypePage} />
               <Route path='/trial' component={TrialList} />
               <Route path='/events/:id' component={EventDetailedPage} />
 

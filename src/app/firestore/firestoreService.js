@@ -155,6 +155,22 @@ export async function updateUserProfile(profile) {
     throw error;
   }
 }
+//ユーザー情報更新
+export async function UserType(profile) {
+  const user = auth.currentUser;
+  try {
+    // if (user.displayName !== profile.displayName) {
+    //   updateProfile(user, {
+    //     displayName: profile.displayName,
+    //   });
+    // }
+    return await updateDoc(doc(db, "users", user.uid), {
+      userType: profile.userType,
+    });
+  } catch (error) {
+    throw error;
+  }
+}
 
 //ユーザー画像保存（photoコレクションに追加）
 export async function updateUserProfilePhoto(downloadURL, filename) {

@@ -17,13 +17,19 @@ export default function NavBar({ setFormOpen }) {
         </Menu.Item>
         <Menu.Item as={NavLink} to='/events' name='Events' />
         <Menu.Item as={NavLink} to='/sandbox' name='Sandbox' />
-        <Menu.Item as={NavLink} to='/trial'>
-          <Button positive inverted content='トライアル申請' />
-        </Menu.Item>
+
         {authenticated && (
-          <Menu.Item as={NavLink} to='/createEvent'>
-            <Button positive inverted content='Create Event' />
-          </Menu.Item>
+          <>
+            <Menu.Item as={NavLink} to='/usertype' name='UserType'>
+              <Button negative inverted content='ユーザー選択' />
+            </Menu.Item>
+            <Menu.Item as={NavLink} to='/createEvent'>
+              <Button positive inverted content='企業投稿ページ' />
+            </Menu.Item>
+            <Menu.Item as={NavLink} to='/trial'>
+              <Button positive inverted content='トライアル申請' />
+            </Menu.Item>
+          </>
         )}
         {authenticated ? <SignedInMenu /> : <SignedOutMenu />}
       </Container>

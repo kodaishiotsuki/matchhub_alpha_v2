@@ -26,7 +26,7 @@ export default function EventFilter({ loading }) {
 
   //ログインユーザー
   const user = auth.currentUser;
-  console.log(user);
+  // console.log(user);
 
   //コレクションuser,サブコレクションcompanies取得
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function EventFilter({ loading }) {
         setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
 
         //コンソールで表示
-        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+        // console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
       },[]);
     } catch (error) {
       console.log(error.message);
@@ -74,7 +74,7 @@ export default function EventFilter({ loading }) {
                 content='Select career'
               />
               <Menu.Item
-                content='全ての企業'
+                content='All Companies'
                 active={filter === "all"}
                 onClick={() => dispatch(setFilter("all"))}
                 disabled={loading}

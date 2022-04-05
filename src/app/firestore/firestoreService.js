@@ -133,6 +133,7 @@ export function setUserProfileData(user) {
     displayName: user.displayName,
     email: user.email,
     photoURL: user.photoURL || null,
+    userUid: user.uid,
     createdAt: serverTimestamp(),
   });
 }

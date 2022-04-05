@@ -1,13 +1,48 @@
-import React, { useState } from "react";
+import { getAuth } from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Grid, Header, Image, Tab } from "semantic-ui-react";
+import { app } from "../../../app/config/firebase";
 // import { format } from "date-fns";
 import ProfileForm from "./ProfileForm";
 
 export default function AboutTab({ profile, isCurrentUser }) {
   const [editMode, setEditMode] = useState(false);
+  //ユーザータイプ
+  const [userType, setUserType] = useState([]);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  //ログインユーザー
+  const user = auth.currentUser;
+  // console.log(user);
+
+  //コレクションuser,サブコレクションcompanies取得
+  useEffect(() => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("email", "==", user.email)
+      );
+      getDocs(q).then((querySnapshot) => {
+        setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+
+        //コンソールで表示
+        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+      }, []);
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
   return (
     <Tab.Pane>
-      <Grid >
+      <Grid>
         <Grid.Column width={16}>
           <Header
             floated='left'
@@ -29,7 +64,7 @@ export default function AboutTab({ profile, isCurrentUser }) {
             <ProfileForm profile={profile} />
           ) : (
             <>
-              <div >
+              <div>
                 {/* <strong>
                   Member since:{format(profile.createdAt, "yyyy/MM/dd")}
                 </strong> */}
@@ -61,13 +96,18 @@ export default function AboutTab({ profile, isCurrentUser }) {
                       />
                     </a>
                   </Card.Content>
-                  <Card.Content>
-                    <h3 style={{ textAlign: "center" }}>
-                      <i className='hand point up outline icon' />
-                      Go to the metty
-                      <i className='hand point up outline icon' />
-                    </h3>
-                  </Card.Content>
+
+                  {userType === "企業" ? (
+                    <Card.Content>
+                      <h3 style={{ textAlign: "center" }}>
+                        <i className='hand point up outline icon' />
+                        Go to the metty
+                        <i className='hand point up outline icon' />
+                      </h3>
+                    </Card.Content>
+                  ) : (
+                    <Card.Content></Card.Content>
+                  )}
                 </Card>
               </div>
             </>

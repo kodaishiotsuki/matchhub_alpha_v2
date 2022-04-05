@@ -2,17 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Header, Image } from "semantic-ui-react";
 
-export default function TrialUserList({ user }) {
-  // const [loading, setLoading] = useState(false);
-
+export default function UserListItem({ user }) {
   return (
     <Card>
-      <Image size='large' src={user.photoURL} />
       <Card.Content>
+        <Image
+          size='large'
+          src={user.photoURL}
+          // style={{ maxHeight: 150, width: 300 }}
+        />
         <Header size='huge'>{user.displayName}</Header>
         <Button
           floated='right'
-          positive
+          color='teal'
+          content='プロフィール'
           as={Link}
           to={`/profile/${user.userUid}`}
         />

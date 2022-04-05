@@ -36,7 +36,7 @@ export default function EventDetailedSidebar({
 
   //ログインユーザー
   const user = auth.currentUser;
-  console.log(user);
+  // console.log(user);
 
   //コレクションuser,サブコレクションcompanies取得
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function EventDetailedSidebar({
         setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
 
         //コンソールで表示
-        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+        // console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
       });
     } catch (error) {
       console.log(error.message);

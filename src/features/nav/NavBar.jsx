@@ -39,7 +39,7 @@ export default function NavBar({ setFormOpen }) {
 
         //コンソールで表示
         // console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
-      },[]);
+      }, []);
     } catch (error) {
       console.log(error.message);
     }
@@ -65,18 +65,27 @@ export default function NavBar({ setFormOpen }) {
 
         {authenticated && (
           <>
-            {/* <Menu.Item as={NavLink} to='/usertype' name='UserType'>
-              <Button negative inverted content='ユーザー選択' />
-            </Menu.Item> */}
-
             {userType === "企業" ? (
-              <Menu.Item as={NavLink} to='/createEvent'>
-                <Button positive inverted content='企業投稿ページ' />
-              </Menu.Item>
+              <>
+                <Menu.Item as={NavLink} to='/createEvent'>
+                  <Button positive inverted content='企業投稿ページ' />
+                </Menu.Item>
+                <Menu.Item as={NavLink} to='/userList'>
+                  <Button positive inverted content='求職者リスト' />
+                </Menu.Item>
+                <Menu.Item as={NavLink} to='/trialUserList'>
+                  <Button negative inverted content='トライアル申請者リスト' />
+                </Menu.Item>
+              </>
             ) : (
-              <Menu.Item as={NavLink} to='/trial'>
-                <Button positive inverted content='トライアル申請' />
-              </Menu.Item>
+              <>
+                <Menu.Item as={NavLink} to='/trial'>
+                  <Button positive inverted content='お気に入り企業リスト' />
+                </Menu.Item>
+                <Menu.Item as={NavLink} to='/trialResult'>
+                  <Button negative inverted content='トライアル申請結果' />
+                </Menu.Item>
+              </>
             )}
           </>
         )}

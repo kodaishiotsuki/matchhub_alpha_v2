@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, Icon, Image, Menu } from "semantic-ui-react";
+import { Dropdown, Image, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -22,8 +22,6 @@ export default function SignedInMenu() {
   return (
     <>
       <Menu.Item position='right'>
-        <Icon className='bell outline icon' size="large" floated="left"/>
-       
         <Image
           avatar
           spaced='right'

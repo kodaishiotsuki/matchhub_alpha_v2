@@ -11,12 +11,14 @@ import {
 } from "firebase/firestore";
 import { useSelector } from "react-redux";
 
-import LoadingComponent from "../../app/layout/LoadingComponent";
+// import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Redirect } from "react-router-dom";
 import TrialListItem from "./TrialListItem";
 import { getAuth } from "firebase/auth";
 
 export default function TrialList({ match, history, location }) {
+  const { error } = useSelector((state) => state.async);
+
   //companiesコレクション取得
   //mapで回す
   //event.titleとevent.trialMonthを表示
@@ -55,10 +57,8 @@ export default function TrialList({ match, history, location }) {
   }, [db, user.uid]);
   // console.log(companies);
 
-  const { loading, error } = useSelector((state) => state.async);
-
   //loading表示
-  if (loading) return <LoadingComponent content='Loading trial...' />;
+  // if (loading) return <LoadingComponent content='Loading trial...' />;
 
   //エラーが発生した場合はリダイレクト
   if (error) return <Redirect to='/error' />;
@@ -66,7 +66,7 @@ export default function TrialList({ match, history, location }) {
   return (
     <>
       {companies.map((company) => (
-          <TrialListItem company={company} key={company.id} />
+        <TrialListItem company={company} key={company.id} />
       ))}
     </>
   );

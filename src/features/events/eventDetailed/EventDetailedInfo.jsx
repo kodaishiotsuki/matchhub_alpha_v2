@@ -9,7 +9,6 @@ import {
 } from "../../../app/firestore/firestoreService";
 import {
   collection,
-  doc,
   getDocs,
   getFirestore,
   query,
@@ -25,6 +24,7 @@ export default function EventDetailedInfo({ event, isHost }) {
   // const [disable, setDisable] = useState(false);
 
   const [userType, setUserType] = useState([]);
+  // const [companyInfo, setCompanyInfo] = useState([]);
   const db = getFirestore(app);
   const auth = getAuth(app);
   const user = auth.currentUser;
@@ -45,7 +45,7 @@ export default function EventDetailedInfo({ event, isHost }) {
     } catch (error) {
       console.log(error.message);
     }
-  }, [db, user.email]);
+  });
 
   //企業のお気に入り登録
   async function handleUserFavoriteCompany() {
@@ -60,33 +60,47 @@ export default function EventDetailedInfo({ event, isHost }) {
       setLoading(false);
     }
   }
+    console.log(event);
+
+  // async function handleUserUnFavoriteCompany() {
+  //   setLoading(true);
+  //   try {
+
+  //     // await deleteDoc(doc(db, "users", user.uid,"companies",));
+
+
+  //     const userDocRef = doc(db, "users", user.uid);
+  //     // getDocs(usersCollectionRef).then((querySnapshot) => {
+  //     //   querySnapshot.docs.map((doc) =>
+  //     //     // deleteDoc(doc(usersCollectionRef, 'companies', doc.id))
+  //     //     console.log(doc.id)
+  //     //   );
+  //     // });
+  //     // deleteDoc(doc(collection(userDocRef, 'companies'), ))
+
+
+
+  //     // const docs = doc(db, "users", user.uid, "companies", company.id);
+  //     // await deleteDoc(docs);
+  //     // const q = query(
+  //     //   collection(db, "users", user.uid, "companies"),
+  //     //   where("userUid", "==", user.uid)
+  //     // );
+  //     // getDocs(q).then((querySnapshot) => {
+  //     //   setCompanyInfo(querySnapshot.docs.map((doc) => doc.data())[0]);
+
+  //     //   //コンソールで表示
+  //     //   console.log(querySnapshot.docs.map((doc) => doc.data())[0]);
+  //     // });
+  //   } catch (error) {
+  //     console.log("fserror", error);
+  //     throw error;
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   //この部分です！！
-  function handleUserUnFavoriteCompany(company) {
-    setLoading(true);
-    try {
-      // const getdocs = doc(db, "users", user.uid, "companies", company.id);
-      // console.log(getdocs);
-        // deleteDoc(setDoc(db, "users", user.uid, "companies", company.id));
-      const q = query(
-        collection(db, "users", user.uid, "companies"),
-        where("userUid", "==", user.uid)
-      );
-      getDocs(q).then((querySnapshot) => {
-        setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userUid);
-
-        //コンソールで表示
-        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userUid);
-      });
-    } catch (error) {
-      console.log("fserror", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }
-
-
 
   return (
     <Segment.Group>
@@ -177,7 +191,7 @@ export default function EventDetailedInfo({ event, isHost }) {
             onClick={handleUserFavoriteCompany}
             loading={loading}
           >
-            お気に入り登録
+            お気に入り解除
           </Button>
         )}
       </Segment>

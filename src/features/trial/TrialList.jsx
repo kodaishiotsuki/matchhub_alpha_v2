@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { app } from "../../app/config/firebase";
 // FireStoreのAPI(この後の例では省略する)
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
 import { useSelector } from "react-redux";
 
 import LoadingComponent from "../../app/layout/LoadingComponent";
@@ -21,18 +27,33 @@ export default function TrialList({ match, history, location }) {
 
   //ログインユーザー
   const user = auth.currentUser;
-  console.log(user);
-
+  // console.log(user);
 
   //コレクションuser,サブコレクションcompanies取得
   useEffect(() => {
-    const usersCollectionRef = collection(db, "users", user.uid, "companies");
-    getDocs(usersCollectionRef).then((querySnapshot) => {
-      setCompanies(
-        querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    try {
+      const q = query(
+        collection(db, "events"),
+        where("favoriteUserId", "==", user.uid)
       );
-    });
+      getDocs(q).then((querySnapshot) => {
+        setCompanies(querySnapshot.docs.map((doc) => doc.data()));
+
+        //コンソールで表示
+        console.log(querySnapshot.docs.map((doc) => doc.data()));
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    // const usersCollectionRef = collection(db, "events", user.uid, "companies");
+    // getDocs(usersCollectionRef).then((querySnapshot) => {
+    //   setCompanies(
+    //     querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    //   );
+    // });
   }, [db, user.uid]);
+  // console.log(companies);
 
   const { loading, error } = useSelector((state) => state.async);
 
@@ -45,7 +66,7 @@ export default function TrialList({ match, history, location }) {
   return (
     <>
       {companies.map((company) => (
-        <TrialListItem key={company.id} company={company} />
+          <TrialListItem company={company} key={company.id} />
       ))}
     </>
   );

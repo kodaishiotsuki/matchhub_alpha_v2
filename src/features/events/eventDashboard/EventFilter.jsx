@@ -40,7 +40,7 @@ export default function EventFilter({ loading }) {
 
         //コンソールで表示
         console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
-      },[db]);
+      },[]);
     } catch (error) {
       console.log(error.message);
     }

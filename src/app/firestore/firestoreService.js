@@ -93,18 +93,19 @@ export function addEventToFirestore(event) {
     }),
     attendeeIds: arrayUnion(user.uid),
     createdAt: serverTimestamp(),
-  }).then(
-    addDoc(collection(db, "companies"), {
-      companyName: event.title,
-      hostUid: user.uid,
-      companyHost: user.displayName,
-      companyPhotoURL: event.category,
-      trialMonth: event.trialMonth,
-      companyCareer: event.career,
-      companyAddress: event.venue.address,
-      createdAt: serverTimestamp(),
-    })
-  );
+  });
+  // }).then(
+  //   addDoc(collection(db, "companies"), {
+  //     companyName: event.title,
+  //     hostUid: user.uid,
+  //     companyHost: user.displayName,
+  //     companyPhotoURL: event.category,
+  //     trialMonth: event.trialMonth,
+  //     companyCareer: event.career,
+  //     companyAddress: event.venue.address,
+  //     createdAt: serverTimestamp(),
+  //   })
+  // );
 }
 
 //イベントコレクション更新
@@ -384,26 +385,103 @@ export function getFollowingDoc(profileId) {
   return getDoc(doc(db, "following", userUid, "userFollowing", profileId));
 }
 
-//お気に入り会社追加
-export function addUserFavoriteCompany(company) {
+//お気に入り企業追加
+export function addUserFavoriteCompany(event) {
   const user = auth.currentUser;
-  return addDoc(collection(db, "users", user.uid, "companies"), {
-    companyName: company.title,
-    companyCareer: company.career,
-    companyCategory: company.category,
-    companyHostUid: company.hostUid,
-    companyHost: company.hostedBy,
-    companyTrialMonth: company.trialMonth,
-    companyAddress: company.venue.address,
-    companyMemberIds: company.attendeeIds,
-    companyMembers: company.attendees,
-    createdAt: serverTimestamp(),
-    userUid: user.uid,
+  return updateDoc(doc(db, "events", event.id), {
+    favoriteUserId: user.uid,
   });
 }
+
+//企業へトライアル申請
+export function SubmitUserToCompany(event) {
+  const user = auth.currentUser;
+  const batch = writeBatch(db);
+  try {
+    batch.set(doc(db, "users", user.uid, "companies", event.id), {
+      companyName: event.title,
+      companyCareer: event.career,
+      companyCategory: event.category,
+      companyHostUid: event.hostUid,
+      companyHost: event.hostedBy,
+      companyTrialMonth: event.trialMonth,
+      companyAddress: event.venue.address,
+      companyMemberIds: event.attendeeIds,
+      companyMembers: event.attendees,
+      createdAt: serverTimestamp(),
+      companyId: event.id,
+    });
+    batch.set(doc(db, "events", event.id, "users", user.uid), {
+      userName: user.displayName,
+      userUid: user.uid,
+      userPhotoURL: user.photoURL,
+    });
+    return batch.commit();
+  } catch (e) {
+    throw e;
+  }
+  // return addDoc(collection(db, "users", user.uid, "companies"), {
+  //   companyName: company.title,
+  //   companyCareer: company.career,
+  //   companyCategory: company.category,
+  //   companyHostUid: company.hostUid,
+  //   companyHost: company.hostedBy,
+  //   companyTrialMonth: company.trialMonth,
+  //   companyAddress: company.venue.address,
+  //   companyMemberIds: company.attendeeIds,
+  //   companyMembers: company.attendees,
+  //   createdAt: serverTimestamp(),
+  //   companyId: company.id,
+  // });
+}
+
+//お気に入り会社追加
+// export async function matching(event) {
+//   const user = auth.currentUser;
+//   const batch = writeBatch(db);
+//   try {
+//     batch.set(doc(db, "matching", user.uid, "requestUser", event.hostUid), {
+//       companyName: event.title,
+//       companyId: event.id,
+//       companyHostId: event.hostUid,
+//     });
+//     // //firestoreのアクション
+//     batch.set(doc(db, "matching", event.hostUid, "responseCompany", user.uid), {
+//       displayName: user.displayName,
+//       uid: user.uid,
+//     });
+//     return await batch.commit();
+//   } catch (e) {
+//     throw e;
+//   }
+// return addDoc(collection(db, "users", user.uid, "companies"), {
+//   companyName: company.title,
+//   companyCareer: company.career,
+//   companyCategory: company.category,
+//   companyHostUid: company.hostUid,
+//   companyHost: company.hostedBy,
+//   companyTrialMonth: company.trialMonth,
+//   companyAddress: company.venue.address,
+//   companyMemberIds: company.attendeeIds,
+//   companyMembers: company.attendees,
+//   createdAt: serverTimestamp(),
+//   companyId: company.id,
+// });
+// }
 
 //お気に入り会社削除
 export function deleteUserFavoriteCompany(companyId) {
   const user = auth.currentUser;
   return deleteDoc(setDoc(db, "users", user.uid, "companies", companyId));
+}
+
+//お気に入り会社へトライアル申請
+export function addCompanyFavoriteUser() {
+  const company = collection(db, "companies");
+  const user = auth.currentUser;
+  const userCollection = collection(company, "0krpUTQNXBjd2kX0GmPu", "users");
+  return setDoc(doc(userCollection), {
+    userName: user.displayName,
+    userUid: user.uid,
+  });
 }

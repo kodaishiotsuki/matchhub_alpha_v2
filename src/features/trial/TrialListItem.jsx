@@ -1,4 +1,6 @@
-import React from "react";
+// import { getAuth } from "firebase/auth";
+// import { getFirestore } from "firebase/firestore";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import {
@@ -10,15 +12,34 @@ import {
   List,
   Segment,
 } from "semantic-ui-react";
+// import { app } from "../../app/config/firebase";
+import { addCompanyFavoriteUser } from "../../app/firestore/firestoreService";
 
 export default function TrialListItem({ company }) {
   //fireStore,firebase
   // const db = getFirestore(app);
   // const auth = getAuth(app);
   // const user = auth.currentUser;
+
+  // console.log(company);
+
   // const userDocRef = doc(db, "users", user.uid);
   // console.log(userDocRef);
+  const [loading, setLoading] = useState(false);
 
+  //企業のお気に入り登録
+  async function handleUserFavoriteCompany() {
+    setLoading(true);
+    try {
+      await addCompanyFavoriteUser();
+    } catch (error) {
+      console.log("fserror", error);
+      throw error;
+    } finally {
+      // setDisable(true);
+      setLoading(false);
+    }
+  }
   return (
     <Segment.Group>
       <Segment>
@@ -27,12 +48,12 @@ export default function TrialListItem({ company }) {
             <Image
               size='tiny'
               rounded
-              src={`/assets/categoryImages/${company.companyCategory}.jpg`}
+              src={`/assets/categoryImages/${company.category}.jpg`}
               style={{ maxHeight: 150, width: 300 }}
             />
             <Item.Content>
               <Item.Header
-                content={company.companyName}
+                content={company.title}
                 style={{ fontSize: 45, marginTop: 20 }}
               />
               <br />
@@ -40,7 +61,7 @@ export default function TrialListItem({ company }) {
                 style={{ top: "-55px", fontSize: 20 }}
                 ribbon='right'
                 color='orange'
-                content={`トライアル期間：${company.companyTrialMonth}ヶ月`}
+                content={`トライアル期間：${company.trialMonth}ヶ月`}
               />
               <br />
               <Icon name='tag' />
@@ -52,11 +73,11 @@ export default function TrialListItem({ company }) {
               <br />
               <Item.Content
                 className='ui teal tag label'
-                content={company.companyCareer[0]}
+                content={company.career[0]}
               ></Item.Content>
               <Item.Content
                 className='ui teal tag label'
-                content={company.companyCareer[1]}
+                content={company.career[1]}
               ></Item.Content>
             </Item.Content>
           </Item>
@@ -65,19 +86,23 @@ export default function TrialListItem({ company }) {
       <Segment>
         <span>
           <Icon name='marker' />
-          {company.companyAddress}
+          {company.venue.address}
         </span>
       </Segment>
-      <Segment clearing style={{maxHeight:90} }>
-        <List floated='left' style={{display:"flex"}}>
-          {company.companyMembers.map((member) => (
+      <Segment clearing style={{ maxHeight: 90 }}>
+        <List floated='left' style={{ display: "flex" }}>
+          {company.attendees.map((member) => (
             <List.Item
               key={member.id}
               as={Link}
               to={`/profile/${member.id}`}
               floated='left'
             >
-              <Image circular src={member.photoURL} style={{ width: 60 ,marginRight:15}} />
+              <Image
+                circular
+                src={member.photoURL}
+                style={{ width: 60, marginRight: 15 }}
+              />
             </List.Item>
           ))}
         </List>
@@ -85,7 +110,14 @@ export default function TrialListItem({ company }) {
           color='green'
           floated='right'
           content='トライアル申請'
-          style={{paddingTop:20,paddingBottom:20,fontSize:20,width:230}}
+          style={{
+            paddingTop: 20,
+            paddingBottom: 20,
+            fontSize: 20,
+            width: 230,
+          }}
+          loading={loading}
+          onClick={addCompanyFavoriteUser}
         />
         {/* <Button
           as={Link}

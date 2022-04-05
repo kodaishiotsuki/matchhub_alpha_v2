@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid, Icon, Label, Segment } from "semantic-ui-react";
 import { format } from "date-fns";
 import EventDetailedMap from "./EventDetailedMap";
@@ -7,17 +7,45 @@ import {
   addUserFavoriteCompany,
   // deleteUserFavoriteCompany,
 } from "../../../app/firestore/firestoreService";
-
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+import { app } from "../../../app/config/firebase";
+import { getAuth } from "firebase/auth";
 
 export default function EventDetailedInfo({ event, isHost }) {
   const { authenticated } = useSelector((state) => state.auth);
   const [mapOpen, setMapOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   // const [disable, setDisable] = useState(false);
-  // const db = getFirestore(app);
-  // const auth = getAuth(app);
 
-  // const user = auth.currentUser;
+  const [userType, setUserType] = useState([]);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+
+  //コレクションuser,サブコレクションcompanies取得
+  useEffect(() => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("email", "==", user.email)
+      );
+      getDocs(q).then((querySnapshot) => {
+        setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+
+        //コンソールで表示
+        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
+
   //企業のお気に入り登録
   async function handleUserFavoriteCompany() {
     setLoading(true);
@@ -120,8 +148,8 @@ export default function EventDetailedInfo({ event, isHost }) {
       {mapOpen && <EventDetailedMap latLng={event.venue.latLng} />}
 
       <Segment attached='bottom' clearing>
-        {/* イベントホストのみ編集可能 */}
-        {!isHost && (
+        {/* 求職者のみ表示 */}
+        {userType === "求職者" && (
           <Button
             color='orange'
             floated='right'
@@ -134,7 +162,7 @@ export default function EventDetailedInfo({ event, isHost }) {
             onClick={handleUserFavoriteCompany}
             loading={loading}
           >
-            お気に入り解除
+            お気に入り登録
           </Button>
         )}
       </Segment>

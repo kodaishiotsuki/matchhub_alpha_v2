@@ -1,19 +1,61 @@
-import React, { useState } from "react";
+import { getAuth } from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
+import { app } from "../../../app/config/firebase";
 import {
   addUserAttendance,
   cancelUserAttendance,
 } from "../../../app/firestore/firestoreService";
 import UnauthModal from "../../auth/UnauthModal";
 
-export default function EventDetailedSidebar({ attendees, hostUid, event, isGoing, isHost }) {
+export default function EventDetailedSidebar({
+  attendees,
+  hostUid,
+  event,
+  isGoing,
+  isHost,
+}) {
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
   const { authenticated } = useSelector((state) => state.auth);
+
+  //ユーザータイプ
+  const [userType, setUserType] = useState([]);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  //ログインユーザー
+  const user = auth.currentUser;
+  console.log(user);
+
+  //コレクションuser,サブコレクションcompanies取得
+  useEffect(() => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("email", "==", user.email)
+      );
+      getDocs(q).then((querySnapshot) => {
+        setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+
+        //コンソールで表示
+        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
+
   //イベントに参加（会社のメンバー）
   async function handleUserJoinEvent() {
     setLoading(true);
@@ -82,7 +124,7 @@ export default function EventDetailedSidebar({ attendees, hostUid, event, isGoin
       </Segment>
 
       <Segment attached='bottom' clearing>
-        {!isHost && (
+        {!isHost && userType === "企業" && (
           <>
             {isGoing ? (
               <Button onClick={handleUserLeaveEvent} loading={loading}>
@@ -101,6 +143,7 @@ export default function EventDetailedSidebar({ attendees, hostUid, event, isGoin
             )}
           </>
         )}
+
         {/* イベントホストのみ編集可能 */}
         {isHost && (
           <Button

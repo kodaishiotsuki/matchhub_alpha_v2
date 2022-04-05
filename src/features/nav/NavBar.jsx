@@ -4,6 +4,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -28,14 +29,21 @@ export default function NavBar({ setFormOpen }) {
 
   //コレクションuser,サブコレクションcompanies取得
   useEffect(() => {
-    const q = query(collection(db, "users"));
-    getDocs(q).then((querySnapshot) => {
-      setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("email", "==", user.email)
+      );
+      getDocs(q).then((querySnapshot) => {
+        setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
 
-      //コンソールで表示
-      console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
-    });
-  },[db]);
+        //コンソールで表示
+        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
 
   const { loading, error } = useSelector((state) => state.async);
 
@@ -57,9 +65,9 @@ export default function NavBar({ setFormOpen }) {
 
         {authenticated && (
           <>
-            <Menu.Item as={NavLink} to='/usertype' name='UserType'>
+            {/* <Menu.Item as={NavLink} to='/usertype' name='UserType'>
               <Button negative inverted content='ユーザー選択' />
-            </Menu.Item>
+            </Menu.Item> */}
 
             {userType === "企業" ? (
               <Menu.Item as={NavLink} to='/createEvent'>

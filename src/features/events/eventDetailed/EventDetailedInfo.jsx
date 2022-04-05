@@ -9,6 +9,7 @@ import {
 } from "../../../app/firestore/firestoreService";
 import {
   collection,
+  doc,
   getDocs,
   getFirestore,
   query,
@@ -44,7 +45,7 @@ export default function EventDetailedInfo({ event, isHost }) {
     } catch (error) {
       console.log(error.message);
     }
-  });
+  }, [db, user.email]);
 
   //企業のお気に入り登録
   async function handleUserFavoriteCompany() {
@@ -61,17 +62,31 @@ export default function EventDetailedInfo({ event, isHost }) {
   }
 
   //この部分です！！
-  // async function handleUserUnFavoriteCompany(company) {
-  //   setLoading(true);
-  //   try {
-  //     await deleteDoc(setDoc(db, "users", user.uid, "companies", company.id));
-  //   } catch (error) {
-  //     console.log("fserror", error);
-  //     throw error;
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+  function handleUserUnFavoriteCompany(company) {
+    setLoading(true);
+    try {
+      // const getdocs = doc(db, "users", user.uid, "companies", company.id);
+      // console.log(getdocs);
+        // deleteDoc(setDoc(db, "users", user.uid, "companies", company.id));
+      const q = query(
+        collection(db, "users", user.uid, "companies"),
+        where("userUid", "==", user.uid)
+      );
+      getDocs(q).then((querySnapshot) => {
+        setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userUid);
+
+        //コンソールで表示
+        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userUid);
+      });
+    } catch (error) {
+      console.log("fserror", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
 
   return (
     <Segment.Group>

@@ -398,6 +398,7 @@ export function addUserFavoriteCompany(company) {
     companyMemberIds: company.attendeeIds,
     companyMembers: company.attendees,
     createdAt: serverTimestamp(),
+    userUid: user.uid,
   });
 }
 

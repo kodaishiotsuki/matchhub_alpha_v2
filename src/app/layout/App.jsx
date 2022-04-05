@@ -39,7 +39,7 @@ function App() {
             <Container className='main'>
               <Route exact path='/events' component={EventDashboard} />
               <Route exact path='/sandbox' component={Sandbox} />
-              <Route exact path='/usertype' component={UserTypePage} />
+              {/* <Route exact path='/usertype' component={UserTypePage} /> */}
               <Route path='/trial' component={TrialList} />
               <Route path='/events/:id' component={EventDetailedPage} />
 

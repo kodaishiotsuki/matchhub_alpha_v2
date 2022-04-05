@@ -43,7 +43,7 @@ export default function NavBar({ setFormOpen }) {
     } catch (error) {
       console.log(error.message);
     }
-  });
+  }, [db]);
 
   const { loading, error } = useSelector((state) => state.async);
 

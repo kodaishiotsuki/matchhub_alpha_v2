@@ -5,6 +5,8 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  query,
+  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -29,11 +31,14 @@ export default function NavBar({ setFormOpen }) {
 
   //コレクションuser,サブコレクションcompanies取得
   useEffect(() => {
-    const usersCollectionRef = collection(db, "users");
-    getDocs(usersCollectionRef).then((querySnapshot) => {
-      setUserType(querySnapshot.docs.map((doc) => doc.data()));
+    const q = query(collection(db, "users"), where("email", "==", user.email));
+    getDocs(q).then((querySnapshot) => {
+      setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+
+      //コンソールで表示
+      console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
     });
-  }, [db, user.uid]);
+  }, [db,user.email]);
 
   const { loading, error } = useSelector((state) => state.async);
 
@@ -59,7 +64,7 @@ export default function NavBar({ setFormOpen }) {
               <Button negative inverted content='ユーザー選択' />
             </Menu.Item>
 
-            {userType.userType === "企業" ? (
+            {userType === "企業" ? (
               <Menu.Item as={NavLink} to='/createEvent'>
                 <Button positive inverted content='企業投稿ページ' />
               </Menu.Item>

@@ -74,6 +74,12 @@ export default function EventFilter({ loading }) {
                 content='Select career'
               />
               <Menu.Item
+                content='全ての企業'
+                active={filter === "all"}
+                onClick={() => dispatch(setFilter("all"))}
+                disabled={loading}
+              />
+              <Menu.Item
                 content='エンジニア'
                 active={filter === "engineer"}
                 onClick={() => dispatch(setFilter("engineer"))}

@@ -1,12 +1,9 @@
 import { getAuth } from "firebase/auth";
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   getFirestore,
   query,
-  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -31,14 +28,14 @@ export default function NavBar({ setFormOpen }) {
 
   //コレクションuser,サブコレクションcompanies取得
   useEffect(() => {
-    const q = query(collection(db, "users"), where("email", "==", user.email));
+    const q = query(collection(db, "users"));
     getDocs(q).then((querySnapshot) => {
       setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
 
       //コンソールで表示
       console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
     });
-  }, [db,user.email]);
+  },[db]);
 
   const { loading, error } = useSelector((state) => state.async);
 

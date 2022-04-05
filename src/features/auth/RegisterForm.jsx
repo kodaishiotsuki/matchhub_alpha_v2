@@ -8,9 +8,11 @@ import { useDispatch } from "react-redux";
 import { closeModal } from "../../app/common/modals/modalReducer";
 import { registerInFirebase } from "../../app/firestore/firebaseService";
 import SocialLogin from "./SocialLogin";
+import { useHistory } from "react-router-dom";
 
 export default function RegisterForm() {
   const dispatch = useDispatch();
+  const history = useHistory();
   return (
     <ModalWrapper size='mini' header='Register to Match Hub'>
       <Formik
@@ -25,6 +27,7 @@ export default function RegisterForm() {
             await registerInFirebase(values);
             setSubmitting(false);
             dispatch(closeModal());
+            history.push("/usertype");
           } catch (error) {
             setErrors({ auth: error.message });
             setSubmitting(false);

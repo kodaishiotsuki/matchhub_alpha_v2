@@ -68,8 +68,8 @@ export default function EventDetailedInfo({ event, isHost }) {
     try {
       const q =
         collection(db, "events");
-        // where("favoriteUserId", "array-contains", user.uid)
-      
+        where("favoriteUserId", "array-contains", user.uid)
+
       getDocs(q).then((querySnapshot) => {
         setFavoriteUsers(
           querySnapshot.docs.map((doc) => doc.data())[0].favoriteUserId[0]

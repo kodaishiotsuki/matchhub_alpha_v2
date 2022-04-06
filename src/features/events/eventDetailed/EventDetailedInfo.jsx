@@ -37,7 +37,7 @@ export default function EventDetailedInfo({ event, isHost }) {
         where("email", "==", user.email)
       );
       getDocs(q).then((querySnapshot) => {
-        setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+        setUserType(querySnapshot.docs.map((doc) => doc.data())[0]);
 
         //コンソールで表示
         console.log(querySnapshot.docs.map((doc) => doc.data())[0].userUid);
@@ -45,7 +45,7 @@ export default function EventDetailedInfo({ event, isHost }) {
     } catch (error) {
       console.log(error.message);
     }
-  });
+  }, [db, user.email]);
 
   //企業のお気に入り登録
   async function handleUserFavoriteCompany() {
@@ -178,7 +178,7 @@ export default function EventDetailedInfo({ event, isHost }) {
 
       <Segment attached='bottom' clearing>
         {/* 求職者のみ表示 */}
-        {userType === "求職者" && (
+        {userType.userType === "求職者" && (
           <Button
             color='orange'
             floated='right'
@@ -190,8 +190,9 @@ export default function EventDetailedInfo({ event, isHost }) {
             }}
             onClick={handleUserFavoriteCompany}
             loading={loading}
+            disabled={userType.userUid === user.uid}
           >
-            お気に入り解除
+            お気に入り登録
           </Button>
         )}
       </Segment>

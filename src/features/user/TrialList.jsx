@@ -36,7 +36,7 @@ export default function TrialList({ match, history, location }) {
     try {
       const q = query(
         collection(db, "events"),
-        where("favoriteUserId", "==", user.uid)
+        where("favoriteUserId", "array-contains", user.uid)
       );
       getDocs(q).then((querySnapshot) => {
         setCompanies(querySnapshot.docs.map((doc) => doc.data()));

@@ -1,0 +1,10 @@
+[debug] [2022-04-06T06:05:39.664Z] ----------------------------------------------------------------------
+[debug] [2022-04-06T06:05:39.666Z] Command:       /Users/kodaishiotsuki/.nodebrew/node/v16.14.0/bin/node /Users/kodaishiotsuki/.nodebrew/current/bin/firebase login
+[debug] [2022-04-06T06:05:39.666Z] CLI Version:   10.5.0
+[debug] [2022-04-06T06:05:39.666Z] Platform:      darwin
+[debug] [2022-04-06T06:05:39.666Z] Node Version:  v16.14.0
+[debug] [2022-04-06T06:05:39.667Z] Time:          Wed Apr 06 2022 15:05:39 GMT+0900 (日本標準時)
+[debug] [2022-04-06T06:05:39.668Z] ----------------------------------------------------------------------
+[debug] 
+[info] i  Firebase optionally collects CLI usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you.
+ 

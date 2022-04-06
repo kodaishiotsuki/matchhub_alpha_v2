@@ -66,18 +66,23 @@ export default function EventDetailedInfo({ event, isHost }) {
   //コレクションevents,favoriteUserId取得
   useEffect(() => {
     try {
-      const q =
-        collection(db, "events");
+      const q = query(
+        collection(db, "events"),
         where("favoriteUserId", "array-contains", user.uid)
+      );
 
       getDocs(q).then((querySnapshot) => {
         setFavoriteUsers(
-          querySnapshot.docs.map((doc) => doc.data())[0].favoriteUserId[0]
+          querySnapshot.docs.map((doc) =>
+            doc.data({ ...doc.data(), id: doc.id })
+          ).favoriteUserId
         );
 
         //コンソールで表示
         console.log(
-          querySnapshot.docs.map((doc) => doc.data())[0].favoriteUserId[0]
+          querySnapshot.docs.map(
+            (doc) => doc.data({ ...doc.data(), id: doc.id }).favoriteUserId
+          )
         );
       });
     } catch (error) {

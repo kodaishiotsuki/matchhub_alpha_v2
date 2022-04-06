@@ -39,7 +39,7 @@ export default function NavBar({ setFormOpen }) {
 
         //コンソールで表示
         // console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
-      }, []);
+      });
     } catch (error) {
       console.log(error.message);
     }

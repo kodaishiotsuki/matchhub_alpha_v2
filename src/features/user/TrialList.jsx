@@ -39,10 +39,12 @@ export default function TrialList({ match, history, location }) {
         where("favoriteUserId", "array-contains", user.uid)
       );
       getDocs(q).then((querySnapshot) => {
-        setCompanies(querySnapshot.docs.map((doc) => doc.data()));
+        setCompanies(
+          querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
 
         //コンソールで表示
-        console.log(querySnapshot.docs.map((doc) => doc.data()));
+        console.log(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       });
     } catch (error) {
       console.log(error.message);

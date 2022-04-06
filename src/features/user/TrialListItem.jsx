@@ -3,16 +3,11 @@
 import { getAuth } from "firebase/auth";
 import {
   arrayRemove,
-  collection,
   doc,
-  getDoc,
-  getDocs,
   getFirestore,
-  query,
   updateDoc,
-  where,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import {
@@ -37,30 +32,6 @@ export default function TrialListItem({ company }) {
   const [deleteLoading, setDeleteLoading] = useState(false);
   //loading（お気に入り解除）
   const [loading, setLoading] = useState(false);
-  //favoriteUsers
-  const [favoriteUsers, setFavoriteUsers] = useState([]);
-
-  //コレクションevents,favoriteUserId取得
-  useEffect(() => {
-    try {
-      const q = query(
-        collection(db, "events"),
-        where("favoriteUserId", "array-contains", user.uid)
-      );
-      getDocs(q).then((querySnapshot) => {
-        setFavoriteUsers(
-          querySnapshot.docs.map((doc) => doc.data())[0].favoriteUserId[0]
-        );
-
-        //コンソールで表示
-        console.log(
-          querySnapshot.docs.map((doc) => doc.data())[0].favoriteUserId[0]
-        );
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }, [db, user.uid]);
 
   //お気に入り企業解除
   // console.log(company.id);
@@ -95,7 +66,7 @@ export default function TrialListItem({ company }) {
   return (
     <Segment.Group>
       {/* events,favoriteUserIdとuser.uidが等しい */}
-      {favoriteUsers === user.uid && (
+      {/* {favoriteUsers === user.uid && ( */}
         <>
           <Segment>
             <Item.Group>
@@ -196,7 +167,6 @@ export default function TrialListItem({ company }) {
         /> */}
           </Segment>
         </>
-      )}
     </Segment.Group>
   );
 }

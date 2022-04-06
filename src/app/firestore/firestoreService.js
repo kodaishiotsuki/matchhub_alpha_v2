@@ -390,7 +390,7 @@ export function getFollowingDoc(profileId) {
 export function addUserFavoriteCompany(event) {
   const user = auth.currentUser;
   return updateDoc(doc(db, "events", event.id), {
-    favoriteUserId: user.uid,
+    favoriteUserId: arrayUnion(user.uid),
   });
 }
 

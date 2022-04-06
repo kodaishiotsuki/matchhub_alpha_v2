@@ -40,7 +40,7 @@ export default function EventDetailedInfo({ event, isHost }) {
         setUserType(querySnapshot.docs.map((doc) => doc.data())[0].userType);
 
         //コンソールで表示
-        // console.log(querySnapshot.docs.map((doc) => doc.data())[0].userType);
+        console.log(querySnapshot.docs.map((doc) => doc.data())[0].userUid);
       });
     } catch (error) {
       console.log(error.message);

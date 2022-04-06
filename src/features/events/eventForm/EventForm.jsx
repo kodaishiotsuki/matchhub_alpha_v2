@@ -12,7 +12,7 @@ import MyTextInput from "../../../app/common/form/MyTextInput";
 import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryData } from "../../../app/api/categoryOptions";
-import {trialMonth} from "../../../app/api/trialMonth"
+import { trialMonth } from "../../../app/api/trialMonth";
 import MyDateInput from "../../../app/common/form/MyDateInput";
 import MyPlaceInput from "../../../app/common/form/MyPlaceInput";
 import {
@@ -52,7 +52,7 @@ export default function EventForm({ match, history, location }) {
     title: "",
     career: [],
     category: "",
-    trialMonth:"",
+    trialMonth: "",
     description: "",
     pitchId: "",
     city: {
@@ -64,7 +64,6 @@ export default function EventForm({ match, history, location }) {
       latLng: null,
     },
     date: "",
-    companyPhotoURL: "",
   };
 
   //入力画面バリデーション
